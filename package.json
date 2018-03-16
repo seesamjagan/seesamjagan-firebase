@@ -1,18 +1,23 @@
 {
-  "name": "seesamjagan",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
-  },
-  "devDependencies": {
-    "react-scripts": "1.1.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  }
+    "name": "seesamjagan",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0"
+    },
+    "devDependencies": {
+        "concurrently": "^3.5.1",
+        "react-scripts": "1.1.1",
+        "node-sass-chokidar": "^1.1.0"
+    },
+    "scripts": {
+        "build-css": "node-sass-chokidar ./src ./node_modules src/ -o src/",
+        "watch-css": "npm run build-css && node-sass-chokidar ./src ./node_modules src/ -o src/ --watch --recursive",
+        "watch": "concurrently --kill-others-on-fail --names \"scss,js\" -c \"bgBlue.bold,bgMagenta.bold\" --prefix name \"npm run watch-css\" \"npm run start\"",
+        "start": "react-scripts start",
+        "build": "npm run build-css && react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject"
+    }
 }
