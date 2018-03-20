@@ -1,0 +1,97 @@
+.widget {
+    padding-bottom: 10px;
+    .title {
+        font-size: medium;
+        display: block;
+        text-align: start;
+        background: #039be5;
+        text-transform: capitalize;
+        text-decoration: none;
+        color: white;
+        padding: 4px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+}
+
+.achievement,
+.education,
+.experience {
+    ul {
+        display: inline;
+        text-align: start;
+    }
+    li {
+        font-size: small;
+        padding: 2px 0 0 10px;
+        border-bottom: 1px solid aliceblue;
+        margin-bottom: 2px;
+        text-align: justify;
+        margin-left: 0px;
+        list-style: none;
+    }
+}
+
+.achievement {
+    .title::before {
+        content: '🏆 ';
+        float: right;
+    }
+    li::before {
+        content: '🏆';
+        padding-right: 10px;
+    }
+}
+
+.education {
+    .title::before {
+        content: '🎓 ';
+        float: right;
+    }
+    li::before {
+        content: '🎓';
+        padding-right: 10px;
+    }
+    li {
+        span {
+            display: inline-block;
+            min-width: 40px;
+        }
+        span:nth-child(2) {
+            padding: 0 10px;
+        }
+    }
+}
+
+.experience {
+    .title::before {
+        content: '🏌 ';
+        float: right;
+    }
+    li::before {
+        content: '🏌';
+        padding-right: 10px;
+    }
+    li {
+        span {
+            display: inline-block;
+        }
+        span:nth-child(2)::before {
+            content: '@';
+            padding: 0 4px;
+        }
+        span:nth-child(3) {
+            display: block;
+            padding: 4px 0;
+        }
+    }
+}
+
+.education,
+.experience {
+    li {
+        span:nth-child(1) {
+            color: rgb(3, 66, 184);
+        }
+    }
+}

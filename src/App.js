@@ -1,88 +1,271 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
 
-const achievements = [
-  'Won “Best Performer Award” for the Q4 of 2015 & Q2 of 2017 in Msys Technologies Pvt Ltd – Chennai',
-  'Won “Best Performer Award” for the month of Sep 2013 in Sybrant Technologies Pvt Ltd – Chennai.',
-  'Won 1st Place in “Communication Game” in National Level meet held at Nesamony Memorial Christian College – Marthandam',
-  'Won 1st Place in “Anistamix” in National Level meet held at Adaikalamatha College – vallam, Thanjavur',
-  'Won 1st Place in “Web Designing” in National Level meet held at Sourashtra College – Madurai',
-  'Won 2nd Place in “Animation Corner” in National Level meet held at Sourashtra College – Madurai',
-  'on 3rd Place In Drawing at State Level in SSLC',
-];
+var firebase = null;
 
-const educations = [
-  {education: 'MCA', score: '81%', duration: '2004 - 2007', detail: 'Kumbakonam Govt. College'},
-  {education: 'BSc', score: '68%', duration: '2001 - 2004', detail: 'St. Joseph’s College.'},
-  {education: 'HSC', score: '64%', duration: '2000 - 2001', detail: 'Fatima Matric. Hr. Sec. School'},
-  {education: 'SSLC', score: '58%', duration: '1998 - 1999', detail: 'Fatima Matric. Hr. Sec. School'}
-];
-
-const experience = [
-  {designation: 'Tech Lead', org: 'MSys Technologies Ind P Ltd', duration: `Nov 2015 - Present`},
-  {designation: 'Tech Lead', org: 'HCL Technologies', duration: 'Oct 2014 - Nov 2015'},
-  {designation: 'Project Lead', org: 'Sybrant Technologies Ind P Ltd', duration: 'Jan 2014 - Sep 2014'},
-  {designation: 'Scrum Master', org: 'Sybrant Technologies Ind P Ltd', duration: 'May 2012 - Dec 2013'},
-  {designation: 'Sr. S/W Engineer', org: 'Object Frontie Software P Ltd', duration: 'Oct 2011 - Mar 2012 '},
-  {designation: 'UI Engineer', org: 'American Megatrends Ind P Ltd', duration: 'Aug 2010 - Sep 2011'},
-  {designation: 'Software Engineer', org: 'Buddies Infotech Ind P Ltd', duration: 'Aug 2007 - Jul 2010'}
-];
-
-const ProfilePicture = (props, context) => {
-  return <span className="profile-picture"> <img src="./assets/images/profile-photo.jpg" alt="jagan profile logo" /></span>
+const ProfilePicture = ({url, alt="Profile Picture"}, context) => {
+  return <span className="profile-picture"> <img src={url} alt={alt} title={alt} /></span>
 }
 
+const Widget = ({title, listItems, className='', renderItems=null}, context) => (
+<div className={"widget " +  className}>
+  <div className="title">{title}</div>
+    <ul> {
+      listItems ? listItems.map((items, i)=><li key={i}>{renderItems ? renderItems(items) : items}</li>) : <li>Loading...</li>
+    }</ul>
+</div>);
+
 const Achievements = ({ achievements, title='Achievements' }, context) => {
-  return <div className="widget">
-    <div className="title">{title}</div>
-    <ul className="achievement">
-    {
-      achievements.map(achievement=><li>{achievement}</li>)
-    }
-    </ul>
-    
-  </div>
+  return <Widget className="achievement" title={title} listItems={achievements}/>
 }
 
 const Educations = ({ educations, title='Education' }, context) => {
-  return <div className="widget">
-    <div className="title">{title}</div>
-    <ul className="education">
-    {
-      educations.map(education=><li><span>{education.education}</span><span>{education.score}</span><span>{education.detail}</span></li>)
-    }
-    </ul>
-    
-  </div>
+  return <Widget className="education" title={title} listItems={educations} renderItems={(education)=><Fragment><span>{education.education}</span><span>{education.score}</span><span>{education.detail}</span></Fragment>}/>
 }
 
 const Experience = ({ experience, title='Experience' }, context) => {
-  return <div className="widget">
-    <div className="title">{title}</div>
-    <ul className="experience">
-    {
-      experience.map(exp=><li><span>{exp.designation}</span><span>{exp.org}</span><span>{exp.duration}</span></li>)
-    }
-    </ul>
-    
-  </div>
+  return <Widget className="experience" title={title} listItems={experience} renderItems={(exp)=><Fragment><span>{exp.designation}</span><span>{exp.org}</span><span>{exp.duration}</span></Fragment>}/>
 }
 
-class App extends Component {
+const AuthUser = ({ currentUser, onSendVerificationEmail, emailMessage, onLogout }, context) => {
+  const {displayName, email, /*photoURL, uid,*/ emailVerified } = currentUser;
+  if(!emailVerified) {
+    return <div className='auth-user'>
+      <span>Hello <span className='user-name'>{displayName || email.split('@')[0]}</span>! </span>
+      <span><span>Please verify your email. </span> {emailMessage ? <span>{emailMessage}</span> : <a  onClick={onSendVerificationEmail}>Resend Verification Email</a>}</span>
+    </div>
+  }
+  return (<div className='auth-user'>
+      <span>Hello <span className='user-name'>{displayName || email.split('@')[0]}</span>! <a  onClick={onLogout}>Sign Out</a></span>
+    </div>)
+}
+
+const NoAuth = ({onSignIn, onSignUp}, context) => {
+  return <div className='no-auth'><a  onClick={onSignIn}>sign in</a>|<a  onClick={onSignUp}>sign up</a></div>
+}
+
+const SIGN_IN = 'signIn';
+
+const SIGN_UP = 'signUp';
+
+class SignInOrSignUp extends Component {
+
+  constructor(props, context) {
+    super(props, context);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+  }
+
+  email = null;
+
+  password = null;
+
+  emailClass = null;
+
+  passwordClass = null;
+
+  onInputChange = e => {
+    this[e.target.name] = e.target.value.trim();
+  }
+
+  onSubmit = e => {
+    const {name}=e.target;
+    this.emailClass = this.email === '' ? 'input-error' : null;
+    this.passwordClass = this.password === '' ? 'input-error' : null;
+
+    if(this.emailClass || this.passwordClass) {
+      this.forceUpdate();
+      return;
+    }
+
+    if(name === SIGN_IN) {
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+        .then(result=>{
+            console.debug(result);
+            this.props.onSubmitSuccess && this.props.onSubmitSuccess();
+          },
+          reason=>{
+            alert(reason.message);
+          }
+        )
+        .catch(function(error) {
+          // Handle Errors here.
+          //var errorCode = error.code;
+          var errorMessage = error.message;
+          console.debug(error);
+          alert(errorMessage);
+          // ...
+        }
+      );
+    } else if(name === SIGN_UP) {
+      // TODO ::: this.props.onSubmitSuccess && this.props.onSubmitSuccess();
+      firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(result=>{
+        console.debug(result);
+        this.props.onSubmitSuccess && this.props.onSubmitSuccess();
+      }, reason=>{
+        alert(reason.message);
+      }).catch(error => {
+        // Handle Errors here.
+        //var errorCode = error.code;
+        var errorMessage = error.message;
+        console.debug(error);
+        alert(errorMessage);
+        // ...
+      });
+    }
+  }
+
+  componentDidMount() {
+    if(this.nameInput) {
+      this.nameInput.setSelectionRange(0, this.nameInput.value.length-1);
+      //this.nameInput.focus();
+    }
+  }
+
   render() {
     return (
+    <div className='form-sign-in-up'>
+      <input name="email" onChange={this.onInputChange} placeholder="Email" className={this.emailClass} ref={input=>this.nameInput=input} autoFocus autoComplete="false" autoSave="false"  />
+      <input name="password" type='password' onChange={this.onInputChange} placeholder="Pasword" className={this.passwordClass} autoComplete="false" autoSave="false" />
+      <a name={SIGN_IN} onClick={this.onSubmit}>Sign In</a>|<a name={SIGN_UP} onClick={this.onSubmit}>Sign Up</a>
+    </div>)
+  }
+}
+
+class Auth extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      currentUser: props.currentUser,
+    };
+
+    this.onSendVerificationEmail = this.onSendVerificationEmail.bind(this);
+    this.clearEmailMessage = this.clearEmailMessage.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(this.state.currentUser !== nextProps.currentUser) {
+      this.setState({currentUser: nextProps.currentUser});
+    }
+  }
+
+  onSignIn = () => {
+    this.setState({
+      showForm: true
+    });
+  };
+
+  onSignUp = () => {
+    this.setState({
+      showForm: true
+    });
+  };
+
+  onLogout = () => {
+    firebase.auth().signOut().then(acceptParam=>{
+      console.debug(acceptParam);
+    }, rejectParam=>{
+      console.debug(rejectParam);
+    }).catch(error=>{
+      console.debug(error);
+    });
+  };
+
+  clearEmailMessage = () => {
+    this.setState({emailMessage: null});
+  }
+
+  onSendVerificationEmail = () => {
+    var user = firebase.auth().currentUser;
+    user.sendEmailVerification().then(() => {
+      this.setState({
+        emailMessage: 'E-Mail sent. Check You Inbox!',
+      }, ()=> {
+        setTimeout(this.clearEmailMessage, 2000);
+      });
+    }).catch((error) => {
+      this.setState({
+        emailMessage: 'Failed to send E-Mail.',
+      }, ()=> {
+        setTimeout(this.clearEmailMessage, 2000);
+      });
+    });
+  };
+
+  render() {
+    const { currentUser, showForm, emailMessage=null } = this.state;
+    if(!currentUser && showForm) {
+          return <div className='auth'>
+            <SignInOrSignUp onSubmitSuccess={e=>this.setState({showForm: false})} />
+          </div>;
+    }
+    return <div className='auth'>
+      {currentUser ?  <AuthUser currentUser={currentUser} onLogout={this.onLogout} onSendVerificationEmail={this.onSendVerificationEmail} emailMessage={emailMessage} /> :  <NoAuth onSignIn={this.onSignIn} onSignUp={this.onSignUp} />}
+    </div>
+  }
+}
+class App extends Component {
+
+  componentWillMount() {
+
+    window.document.addEventListener('DOMContentLoaded', () =>{
+      // Get a reference to the database service
+
+      firebase = window.firebase;
+
+      const currentUser = firebase.auth().currentUser;
+
+      this.setState({currentUser});
+
+      this.profile = firebase.database().ref("profile");
+
+      this.profile.on('value', (snapshot) => {
+        const {achievements, experience, educations, title, desc, picture, name} = snapshot.val();
+        this.setState({
+          achievements, experience, educations, title, desc, picture, name
+        }); // end of setstate
+      }); //end of on value
+
+      firebase.auth().onAuthStateChanged(currentUser => {
+        console.log('displayName:', currentUser, currentUser && currentUser.displayName);
+        this.setState({
+          currentUser: currentUser,
+        });
+      });
+
+    });// end of dom content loaded
+  }
+
+  componentWillUnmount() {
+    if(this.profile) {
+      this.profile.off();
+    }
+  }
+
+  state = {
+    achievements:null, experience:null, educations:null, title: '', desc: '', currentUser: null
+  }
+
+  render() {
+    const {achievements, experience, educations, title, desc, currentUser, picture, name} = this.state;
+    currentUser &&  console.log('displayName:', currentUser, currentUser.displayName);
+    const titles = title.split(',');
+    return (
       <div className="App">
+        
         <div id="message">
+          <Auth currentUser={currentUser} />
           <div style={{textAlign: 'center', }}>
-            <ProfilePicture />
-            <h1>Jagan Langa</h1>
-            <h2>Certified ScrumMaster&trade;</h2>
-            <p>Having 10+ years of experience in UI architecture & development in medium to large scale enterprise level web application which spans across multiple domains such as storage, networking, engineering, finance, multimedia,  LMS and LCMS.</p>
+            {picture && <ProfilePicture url={picture} alt={name} /> }
+            <h1>{name}</h1>
+            {
+              titles.map(title=><h2 key={title}>{title}</h2>)
+            }
+            <p>{desc}</p>
             <Achievements achievements={achievements} />
             <Experience experience={experience} />
             <Educations educations={educations} />
           </div>
-          {/*<a target="_blank" rel="noopener noreferrer" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>*/}
       </div>
       </div>
     );

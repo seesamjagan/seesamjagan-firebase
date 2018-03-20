@@ -4,42 +4,61 @@
     margin: 50px auto 16px;
     padding: 32px 24px;
     border-radius: 3px;
+    h1 {
+        font-size: 22px;
+        font-weight: 300;
+        color: rgba(0, 0, 0, 0.6);
+        margin: 0 0 16px;
+    }
+    h2 {
+        color: #ffa100;
+        font-weight: bold;
+        font-size: 16px;
+        margin: 0 0 8px;
+    }
+    p {
+        line-height: 140%;
+        margin: 16px 0 24px;
+        font-size: 14px;
+        text-align: justify;
+    }
 }
 
-#message h2 {
-    color: #ffa100;
-    font-weight: bold;
-    font-size: 16px;
-    margin: 0 0 8px;
-}
-
-#message h1 {
-    font-size: 22px;
-    font-weight: 300;
-    color: rgba(0, 0, 0, 0.6);
-    margin: 0 0 16px;
-}
-
-#message p {
-    line-height: 140%;
-    margin: 16px 0 24px;
-    font-size: 14px;
-    text-align: justify;
-}
-
-#message a {
-    display: block;
-    text-align: center;
-    background: #039be5;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: white;
-    padding: 16px;
-    border-radius: 4px;
+.auth {
+    margin: -30px -22px 22px;
+    background-color: #eceff1;
+    padding: 2px;
+    box-shadow: 0 1px 1px #666;
+    text-align: right;
+    input {
+        border: solid thin #01557d;
+        padding: 1px;
+        margin: 0 1px;
+    }
+    .input-error {
+        border-color: red;
+    }
+    .user-name {
+        text-transform: capitalize;
+        font-weight: bold;
+    }
+    a {
+        display: inline-block;
+        text-align: center;
+        background: #039be5;
+        text-transform: capitalize;
+        text-decoration: none;
+        color: white;
+        padding: 2px 4px;
+        border-radius: 2px;
+        font-size: small;
+        cursor: pointer;
+        margin: 0 1px;
+    }
 }
 
 #message,
-#message a {
+.auth a {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
@@ -53,6 +72,8 @@
     display: inline-block;
     border-radius: 50%;
     box-shadow: 0 0 4px;
+    min-height: 150px;
+    max-height: 150px;
 }
 
 @media (max-width: 600px) {

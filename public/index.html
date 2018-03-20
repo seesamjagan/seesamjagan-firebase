@@ -29,10 +29,11 @@
     <!-- include only the Firebase features as you need -->
     <script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/4.11.0/firebase-auth.js"></script>
     <script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/4.11.0/firebase-database.js"></script>
-    <script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/4.11.0/firebase-messaging.js"></script>
-    <script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/4.11.0/firebase-storage.js"></script>
+    <!--<script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/4.11.0/firebase-messaging.js"></script>-->
+    <!--<script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/4.11.0/firebase-storage.js"></script>-->
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="%REACT_APP_FIREBASE_HOST%/__/firebase/init.js"></script>
+    <!--<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>-->
 
     <style media="screen">
 
@@ -45,8 +46,7 @@
       You need to enable JavaScript to run this app.
     </noscript>
 
-    <div id="root"></div>
-    <p id="load">Loading&hellip;</p>
+    <div id="root">Loading&hellip;</div>
 
     <script>
         function setup() {
@@ -63,20 +63,22 @@
                 //
 
 
-                try {
-                    var app = firebase.app();
+                /*
+                                try {
+                                    var app = firebase.app();
 
-                    var features = ['auth', 'database', 'messaging', 'storage'];
-                    features = features.filter(function(feature) {
-                        return typeof app[feature] === 'function'
-                    });
+                                    var features = ['auth', 'database', 'messaging', 'storage'];
+                                    features = features.filter(function(feature) {
+                                        return typeof app[feature] === 'function'
+                                    });
 
-                    document.getElementById('load').innerHTML = 'Firebase SDK loaded with ' + features.join(', ');
+                                    document.getElementById('load').innerHTML = 'Firebase SDK loaded with ' + features.join(', ');
 
-                } catch (e) {
-                    console.error(e);
-                    document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-                }
+                                } catch (e) {
+                                    console.error(e);
+                                    document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+                                }
+                                */
                 /*
                 "firestore": {
                   "rules": "seesamjagan.firestore.rules",
