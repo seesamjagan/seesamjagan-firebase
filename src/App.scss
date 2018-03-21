@@ -1,3 +1,4 @@
+@import 'variables.scss';
 #message {
     background: white;
     max-width: 360px;
@@ -11,7 +12,7 @@
         margin: 0 0 16px;
     }
     h2 {
-        color: #ffa100;
+        color: $SECONDARY_COLOR;
         font-weight: bold;
         font-size: 16px;
         margin: 0 0 8px;
@@ -26,14 +27,15 @@
 
 .auth {
     margin: -30px -22px 22px;
-    background-color: #eceff1;
+    background-color: $PRIMARY_BG_COLOR;
     padding: 2px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+    box-shadow: $BOX_SHADOW;
     text-align: right;
     input {
-        border: solid thin #01557d;
+        border: solid thin $PRIMARY_COLOR;
         padding: 1px;
         margin: 0 1px;
+        max-width: 130px;
     }
     .input-error {
         border-color: red;
@@ -45,7 +47,7 @@
     a {
         display: inline-block;
         text-align: center;
-        background: #039be5;
+        background-color: $PRIMARY_COLOR;
         text-transform: capitalize;
         text-decoration: none;
         color: white;
@@ -59,19 +61,14 @@
 
 #message,
 .auth a {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-#load {
-    color: rgba(0, 0, 0, 0.4);
-    text-align: center;
-    font-size: 13px;
+    box-shadow: $BOX_SHADOW;
 }
 
 .profile-picture img {
     display: inline-block;
     border-radius: 50%;
-    box-shadow: 0 0 4px;
+    border: solid thick floralwhite;
+    box-shadow: $BOX_SHADOW;
     min-height: 150px;
     max-height: 150px;
     max-width: 150px;
@@ -85,6 +82,6 @@
         box-shadow: none;
     }
     body {
-        border-top: 8px solid #ffa100;
+        border-top: 8px solid $SECONDARY_COLOR;
     }
 }

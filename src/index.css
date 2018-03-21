@@ -1,4 +1,12 @@
 @charset "UTF-8";
+body {
+  background: #ECEFF1;
+  color: rgba(43, 40, 40, 0.87);
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: relative; }
+
 .widget {
   padding-bottom: 10px; }
   .widget .title {
@@ -11,40 +19,53 @@
     color: white;
     padding: 4px;
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
+  .widget .title::before {
+    float: right;
+    padding-right: 5px; }
+  .widget ul {
+    display: inline;
+    text-align: start; }
+  .widget li {
+    font-size: small;
+    padding: 2px 0 0 5px;
+    border-bottom: 1px solid aliceblue;
+    margin-bottom: 2px;
+    text-align: justify;
+    margin-left: 0px;
+    list-style: none; }
+  .widget li::before {
+    padding-right: 10px; }
 
-.achievement ul,
-.education ul,
-.experience ul {
+.stars .star {
   display: inline;
-  text-align: start; }
+  color: #ECEFF1; }
 
-.achievement li,
-.education li,
-.experience li {
-  font-size: small;
-  padding: 2px 0 0 10px;
-  border-bottom: 1px solid aliceblue;
-  margin-bottom: 2px;
-  text-align: justify;
-  margin-left: 0px;
-  list-style: none; }
+.stars .star::before {
+  content: '☀';
+  font-size: large;
+  padding: 0 5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
 
-.achievement .title::before {
-  content: '🏆 ';
-  float: right; }
+.stars .star.active {
+  color: #039be5; }
 
+.skillset .title::before,
+.skillset li::before {
+  content: '✨'; }
+
+.skillset li span {
+  display: inline-block;
+  min-width: 100px; }
+
+.achievement .title::before,
 .achievement li::before {
-  content: '🏆';
-  padding-right: 10px; }
+  content: '🏆'; }
 
-.education .title::before {
-  content: '🎓 ';
-  float: right; }
-
+.education .title::before,
 .education li::before {
-  content: '🎓';
-  padding-right: 10px; }
+  content: '🎓'; }
 
 .education li span {
   display: inline-block;
@@ -53,25 +74,29 @@
 .education li span:nth-child(2) {
   padding: 0 10px; }
 
-.experience .title::before {
-  content: '🏌 ';
-  float: right; }
-
+.experience .title::before,
 .experience li::before {
-  content: '🏌';
-  padding-right: 10px; }
+  content: '🏄'; }
 
 .experience li span {
   display: inline-block; }
 
+.experience li span:nth-child(2) {
+  position: relative;
+  font-weight: bold;
+  color: #AAA; }
+
 .experience li span:nth-child(2)::before {
   content: '@';
-  padding: 0 4px; }
+  padding: 0 4px;
+  font-size: smaller; }
 
 .experience li span:nth-child(3) {
   display: block;
-  padding: 4px 0; }
+  padding: 4px 24px; }
 
+.skillset li span:nth-child(1),
 .education li span:nth-child(1),
 .experience li span:nth-child(1) {
-  color: #0342b8; }
+  color: #039be5;
+  font-weight: bold; }

@@ -22,14 +22,15 @@
 
 .auth {
   margin: -30px -22px 22px;
-  background-color: #eceff1;
+  background-color: #ECEFF1;
   padding: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   text-align: right; }
   .auth input {
-    border: solid thin #01557d;
+    border: solid thin #039be5;
     padding: 1px;
-    margin: 0 1px; }
+    margin: 0 1px;
+    max-width: 130px; }
   .auth .input-error {
     border-color: red; }
   .auth .user-name {
@@ -38,7 +39,7 @@
   .auth a {
     display: inline-block;
     text-align: center;
-    background: #039be5;
+    background-color: #039be5;
     text-transform: capitalize;
     text-decoration: none;
     color: white;
@@ -52,15 +53,11 @@
 .auth a {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
 
-#load {
-  color: rgba(0, 0, 0, 0.4);
-  text-align: center;
-  font-size: 13px; }
-
 .profile-picture img {
   display: inline-block;
   border-radius: 50%;
-  box-shadow: 0 0 4px;
+  border: solid thick floralwhite;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   min-height: 150px;
   max-height: 150px;
   max-width: 150px; }

@@ -3,17 +3,22 @@ import './App.css';
 
 var firebase = null;
 
+const SIGN_IN = 'signIn';
+
+const SIGN_UP = 'signUp';
+
 const ProfilePicture = ({url, alt="Profile Picture"}, context) => {
   return <span className="profile-picture"> <img src={url} alt={alt} title={alt} /></span>
 }
 
-const Widget = ({title, listItems, className='', renderItems=null}, context) => (
-<div className={"widget " +  className}>
+const Widget = ({title, listItems, className='', renderItems=null}, context) => {
+  return <div className={"widget " +  className}>
   <div className="title">{title}</div>
     <ul> {
       listItems ? listItems.map((items, i)=><li key={i}>{renderItems ? renderItems(items) : items}</li>) : <li>Loading...</li>
     }</ul>
-</div>);
+  </div>;
+};
 
 const Achievements = ({ achievements, title='Achievements' }, context) => {
   return <Widget className="achievement" title={title} listItems={achievements}/>
@@ -25,6 +30,18 @@ const Educations = ({ educations, title='Education' }, context) => {
 
 const Experience = ({ experience, title='Experience' }, context) => {
   return <Widget className="experience" title={title} listItems={experience} renderItems={(exp)=><Fragment><span>{exp.designation}</span><span>{exp.org}</span><span>{exp.duration}</span></Fragment>}/>
+}
+
+const Star = ({active}, context) => {
+  return <span className={'star' + (active ? ' active' : '')}></span>;
+}
+
+const Stars = ({value, max}, context) => {
+  return <span className="stars">{Array.apply(null, { length: max }).map((val, i)=><Star key={i} active={i<value} />)}</span>
+}
+const SkillSet = ({ skills, title='Skill Set' }, context) => {
+  const items = skills ? Object.keys(skills).map(key=>({name: key, detail: skills[key]})) : null;
+  return <Widget className="skillset" title={title} listItems={items} renderItems={(skill)=><Fragment><span>{skill.name}</span><Stars value={skill.detail.star} max={5} /></Fragment>}/>
 }
 
 const AuthUser = ({ currentUser, onSendVerificationEmail, emailMessage, onLogout }, context) => {
@@ -43,11 +60,6 @@ const AuthUser = ({ currentUser, onSendVerificationEmail, emailMessage, onLogout
 const NoAuth = ({onSignIn, onSignUp}, context) => {
   return <div className='no-auth'><a  onClick={onSignIn}>sign in</a>|<a  onClick={onSignUp}>sign up</a></div>
 }
-
-const SIGN_IN = 'signIn';
-
-const SIGN_UP = 'signUp';
-
 class SignInOrSignUp extends Component {
 
   constructor(props, context) {
@@ -204,6 +216,7 @@ class Auth extends Component {
     </div>
   }
 }
+
 class App extends Component {
 
   componentWillMount() {
@@ -220,10 +233,7 @@ class App extends Component {
       this.profile = firebase.database().ref("profile");
 
       this.profile.on('value', (snapshot) => {
-        const {achievements, experience, educations, title, desc, picture, name} = snapshot.val();
-        this.setState({
-          achievements, experience, educations, title, desc, picture, name
-        }); // end of setstate
+        this.setState(snapshot.val()); // end of setstate // {achievements, experience, educations, title, desc, picture, name, skills}
       }); //end of on value
 
       firebase.auth().onAuthStateChanged(currentUser => {
@@ -247,7 +257,7 @@ class App extends Component {
   }
 
   render() {
-    const {achievements, experience, educations, title, desc, currentUser, picture, name} = this.state;
+    const {achievements, experience, educations, title, desc, currentUser, picture, name, skills} = this.state;
     currentUser &&  console.log('displayName:', currentUser, currentUser.displayName);
     const titles = title.split(',');
     return (
@@ -264,6 +274,7 @@ class App extends Component {
             <p>{desc}</p>
             <Achievements achievements={achievements} />
             <Experience experience={experience} />
+            <SkillSet skills={skills} />
             <Educations educations={educations} />
           </div>
       </div>
