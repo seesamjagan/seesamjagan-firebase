@@ -33,7 +33,7 @@ body {
     }
     li {
         font-size: small;
-        padding: 2px 0 0 5px;
+        padding: 2px 0 0 2px;
         border-bottom: 1px solid aliceblue;
         margin-bottom: 2px;
         text-align: justify;
@@ -49,15 +49,16 @@ body {
     .star {
         display: inline;
         color: $PRIMARY_BG_COLOR;
+        font-weight: normal !important;
     }
     .star::before {
         content: '☀';
         font-size: large;
-        padding: 0 5px;
+        padding: 0 10px;
         text-shadow: $TEXT_SHADOW;
     }
     .star.active {
-        color: $PRIMARY_COLOR;
+        color: $SECONDARY_COLOR;
     }
 }
 
@@ -113,7 +114,7 @@ body {
         }
         span:nth-child(2)::before {
             content: '@';
-            padding: 0 4px;
+            padding: 0 2px;
             font-size: smaller;
         }
         span:nth-child(3) {

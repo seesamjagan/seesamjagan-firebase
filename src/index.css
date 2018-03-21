@@ -29,7 +29,7 @@ body {
     text-align: start; }
   .widget li {
     font-size: small;
-    padding: 2px 0 0 5px;
+    padding: 2px 0 0 2px;
     border-bottom: 1px solid aliceblue;
     margin-bottom: 2px;
     text-align: justify;
@@ -40,16 +40,17 @@ body {
 
 .stars .star {
   display: inline;
-  color: #ECEFF1; }
+  color: #ECEFF1;
+  font-weight: normal !important; }
 
 .stars .star::before {
   content: '☀';
   font-size: large;
-  padding: 0 5px;
+  padding: 0 10px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); }
 
 .stars .star.active {
-  color: #039be5; }
+  color: #ffa100; }
 
 .skillset .title::before,
 .skillset li::before {
@@ -88,7 +89,7 @@ body {
 
 .experience li span:nth-child(2)::before {
   content: '@';
-  padding: 0 4px;
+  padding: 0 2px;
   font-size: smaller; }
 
 .experience li span:nth-child(3) {

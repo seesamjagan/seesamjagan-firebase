@@ -36,12 +36,15 @@ const Star = ({active}, context) => {
   return <span className={'star' + (active ? ' active' : '')}></span>;
 }
 
-const Stars = ({value, max}, context) => {
-  return <span className="stars">{Array.apply(null, { length: max }).map((val, i)=><Star key={i} active={i<value} />)}</span>
+const Stars = ({value, max, valueOnly=false}, context) => {
+  return <span className="stars">{Array.apply(null, { length: valueOnly ? value : max }).map((val, i)=><Star key={i} active={i<value} />)}</span>
 }
-const SkillSet = ({ skills, title='Skill Set' }, context) => {
+const SkillSet = ({ skills, title='Skill Set', sortByStars=true }, context) => {
   const items = skills ? Object.keys(skills).map(key=>({name: key, detail: skills[key]})) : null;
-  return <Widget className="skillset" title={title} listItems={items} renderItems={(skill)=><Fragment><span>{skill.name}</span><Stars value={skill.detail.star} max={5} /></Fragment>}/>
+  if(items && sortByStars) {
+    items.sort((a,b)=>b.detail.star-a.detail.star)
+  }
+  return <Widget className="skillset" title={title} listItems={items} renderItems={(skill)=><Fragment><span>{skill.name}</span><Stars value={skill.detail.star} max={5} valueOnly /></Fragment>}/>
 }
 
 const AuthUser = ({ currentUser, onSendVerificationEmail, emailMessage, onLogout }, context) => {
